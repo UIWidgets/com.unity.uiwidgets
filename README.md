@@ -309,9 +309,13 @@ this [section](#unity).
 
       For better rendering result, performance and continuous upgrade and support, you are always suggested to use UIWidgets 2.0 for your project. Use UIWidgets 1.0 only if you need to support specific target platforms like webgl.
 
-4. I encountered with a link error with OpenGLES for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
+4. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
 
       This is caused by Unity because it removed the dependency on OpenGLES library on Unity 2020.3. To fix this issue, please open the XCode project and manually add the OpenGLES library to the UnityFramework target.
+
+5. I encountered with a link error about **bitcode** for iOS when building UIWidgets 2.0 project using XCode.
+
+      This is because the current default UIWidgets.a library in the ``com.unity.uiwidgets/Runtime/Plugin/ios`` folder is built without bitcode support. To address this issue, you can either (1) turn off the ``Enable Bitcode`` in your XCode Build Option or (2) upzip and replace the original library with the one with bitcode support at ``engine/backup/library/ios_bitcode/UIWidgets.a.zip``.
       
 ## Contact Us
 

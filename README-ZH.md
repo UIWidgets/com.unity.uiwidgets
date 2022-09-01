@@ -284,10 +284,14 @@ using(Isolate.getScope(the isolate of your App)) {
 
       由于UIWidgets 2.0在效果和效率上的优势，因此推荐大家使用。仅当您需要在UIWidgets 2.0暂时不支持的平台（如webgl）上开发时才推荐使用UIWidgets 1.0。此外，由于人力原因，目前只有UIWidgets 2.0我们会持续更新。
 
-4. 使用Unity 2020.3LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到OpenGLES库函数。
+4. 使用Unity 2020.3LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到**OpenGLES**库函数。
 
       这是因为在Unity 2020.3版本中Unity导出的iOS项目默认不再包含对OpenGLES库的依赖，但UIWidgets 2.0需要依赖该库。为了解决这个问题，您需要手动用Xcode打开项目并为UnityFramework添加上对OpenGLES库的依赖。
-      
+
+5. 使用XCode构建包含UIWidgets 2.0支持的Unity项目到iOS平台时遇到提示UIWidgets.a不包含**bitcode**。
+
+      为了规避github对文件大小的限制，我们暂时默认使用的iOS平台的UIWidgets.a文件（位于``com.unity.uiwidgets/Runtime/Plugin/ios``）为不带bitcode版本。为了解决这个问题，您可以选择（1）在XCode的Build Option选项中中关闭``Enable Bitcode``或者（2）解压并使用路径``engine/backup/library/ios_bitcode/UIWidgets.a.zip``下的带bitcode版本的库文件来替换默认库文件之后重新导出iOS项目。
+
 ## 联系我们
 官方QQ群: UIWidgets (群ID: 234207153)
 
