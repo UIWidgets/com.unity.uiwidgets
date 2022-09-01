@@ -292,16 +292,7 @@ Meanwhile, you can join our [discussion channel](https://unity.cn/plate/uiwidget
 this [section](#unity).
 
 
-2. After openning a UIWidgets 2.0 project I receive an error **DllNotFoundException: libUIWidgets**.
-
-      Please make sure that the native libraries are correctly downloaded to your project. You can find them under *UIWidgetsPackageRoot*/Runtime/Plugins. For example, the libUIWidgets.dll under the sub folder *X86_64* is the native library for Windows and the libUIWidgets.dylib under *osx* is for Mac.
-
-      If the libraries are not there or their sizes are small (<1MB), please ensure that you have installed **Git Large File Storage** in your computer and then try the following command line inside the UIWidgets repository.
-      ```
-      git lfs pull
-      ```
-
-3. What is the difference between UIWidgets 2.0 and UIWidgets 1.0 ?
+2. What is the difference between UIWidgets 2.0 and UIWidgets 1.0 ?
 
       In UIWidgets 1.0 we used Unity [Graphics API](https://docs.unity3d.com/ScriptReference/Graphics.html) for the rendering and all rendering codes are writen in C#. Therefore it is able to run freely on all platforms that Unity supports but relatively slow. The rendering result is also not exactly the same as in flutter due to the difference between the Unity rendering engine and flutter engine.
 
@@ -309,11 +300,11 @@ this [section](#unity).
 
       For better rendering result, performance and continuous upgrade and support, you are always suggested to use UIWidgets 2.0 for your project. Use UIWidgets 1.0 only if you need to support specific target platforms like webgl.
 
-4. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
+3. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
 
       This is caused by Unity because it removed the dependency on OpenGLES library on Unity 2020.3. To fix this issue, please open the XCode project and manually add the OpenGLES library to the UnityFramework target.
 
-5. I encountered with a link error about **bitcode** for iOS when building UIWidgets 2.0 project using XCode.
+4. I encountered with a link error about **bitcode** for iOS when building UIWidgets 2.0 project using XCode.
 
       This is because the current default UIWidgets.a library in the ``com.unity.uiwidgets/Runtime/Plugin/ios`` folder is built without bitcode support. To address this issue, you can either (1) turn off the ``Enable Bitcode`` in your XCode Build Option or (2) upzip and replace the original library with the one with bitcode support at ``engine/backup/plugin/ios_bitcode/UIWidgets.a.zip``.
       

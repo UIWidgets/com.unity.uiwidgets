@@ -266,16 +266,7 @@ using(Isolate.getScope(the isolate of your App)) {
 
       请确定您使用的Unity编辑器版本兼容您使用的UIWidgets版本。例如，**UIWidgets 2.0.3**只支持以下中国版Unity版本：2019.4.26f1c1 ～ 2019.4.29f1c1。您可以在[这里](#unity)查找兼容您UIWidgets版本的Unity版本信息。
 
-2. 在打开一个UIWidgets 2.0项目后Unity控制台报错，报错信息为**DllNotFoundException: libUIWidgets**。
-
-      请首先检查您的UIWidgets根目录下/Runtime/Plugins中适配各个平台的C++库文件是否完整。例如，Windows平台下的libUIWidgets.dll位于*X86_64*子目录下，Mac平台下的libUIWidgets.dylib位于*osx*目录下。
-
-      如果您发现库文件不存在或者文件大小不正常（<1MB)，请确认您已经在您电脑上安装了**Git Large File Storage**，然后在UIWidgets根目录下执行如下指令：
-      ```
-      git lfs pull
-      ```
-
-3. UIWidgets 2.0和UIWidgets 1.0的区别大吗？哪个更适合我的项目？
+2. UIWidgets 2.0和UIWidgets 1.0的区别大吗？哪个更适合我的项目？
 
       在UIWidgets 1.0中所有渲染相关代码都由C#编写并且使用了Unity [Graphics API](https://docs.unity3d.com/ScriptReference/Graphics.html)
       进行渲染。因此它可以正确运行在任意Unity支持的平台。不过与此同时，它的运行效率较低，且渲染效果与flutter在某一些细节上并不一致。
@@ -284,11 +275,11 @@ using(Isolate.getScope(the isolate of your App)) {
 
       由于UIWidgets 2.0在效果和效率上的优势，因此推荐大家使用。仅当您需要在UIWidgets 2.0暂时不支持的平台（如webgl）上开发时才推荐使用UIWidgets 1.0。此外，由于人力原因，目前只有UIWidgets 2.0我们会持续更新。
 
-4. 使用Unity 2020.3LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到**OpenGLES**库函数。
+3. 使用Unity 2020.3LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到**OpenGLES**库函数。
 
       这是因为在Unity 2020.3版本中Unity导出的iOS项目默认不再包含对OpenGLES库的依赖，但UIWidgets 2.0需要依赖该库。为了解决这个问题，您需要手动用Xcode打开项目并为UnityFramework添加上对OpenGLES库的依赖。
 
-5. 使用XCode构建包含UIWidgets 2.0支持的Unity项目到iOS平台时遇到提示UIWidgets.a不包含**bitcode**。
+4. 使用XCode构建包含UIWidgets 2.0支持的Unity项目到iOS平台时遇到提示UIWidgets.a不包含**bitcode**。
 
       为了规避github对文件大小的限制，我们暂时默认使用的iOS平台的UIWidgets.a文件（位于``com.unity.uiwidgets/Runtime/Plugin/ios``）为不带bitcode版本。为了解决这个问题，您可以选择（1）在XCode的Build Option选项中中关闭``Enable Bitcode``或者（2）解压并使用路径``engine/backup/plugin/ios_bitcode/UIWidgets.a.zip``下的带bitcode版本的库文件来替换默认库文件之后重新导出iOS项目。
 
