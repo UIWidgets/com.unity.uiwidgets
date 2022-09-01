@@ -281,7 +281,7 @@ using(Isolate.getScope(the isolate of your App)) {
 
 4. 使用XCode构建包含UIWidgets 2.0支持的Unity项目到iOS平台时遇到提示UIWidgets.a不包含**bitcode**。
 
-      为了规避github对文件大小的限制，我们暂时默认使用的iOS平台的UIWidgets.a文件（位于``com.unity.uiwidgets/Runtime/Plugin/ios``）为不带bitcode版本。为了解决这个问题，您可以选择（1）在XCode的Build Option选项中中关闭``Enable Bitcode``或者（2）解压并使用路径``engine/backup/plugin/ios_bitcode/UIWidgets.a.zip``下的带bitcode版本的库文件来替换默认库文件之后重新导出iOS项目。
+      为了规避github对文件大小的限制，在iOS平台我们默认使用的是不带bitcode的libUIWidgets.a库文件（位于``com.unity.uiwidgets/Runtime/Plugin/ios``）。为了解决这个问题，您可以选择（1）在XCode的Build Option选项中中关闭``Enable Bitcode``或者（2）解压并使用路径``engine/backup/plugin/ios_bitcode/libUIWidgets.a.zip``下的带bitcode版本的库文件来替换默认库文件之后重新导出iOS项目。
 
 ## 联系我们
 官方QQ群: UIWidgets (群ID: 234207153)

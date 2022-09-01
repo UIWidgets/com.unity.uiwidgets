@@ -306,7 +306,7 @@ this [section](#unity).
 
 4. I encountered with a link error about **bitcode** for iOS when building UIWidgets 2.0 project using XCode.
 
-      This is because the current default UIWidgets.a library in the ``com.unity.uiwidgets/Runtime/Plugin/ios`` folder is built without bitcode support. To address this issue, you can either (1) turn off the ``Enable Bitcode`` in your XCode Build Option or (2) upzip and replace the original library with the one with bitcode support at ``engine/backup/plugin/ios_bitcode/UIWidgets.a.zip``.
+      This is because the current default libUIWidgets.a library in the ``com.unity.uiwidgets/Runtime/Plugin/ios`` folder is built without bitcode support. To address this issue, you can either (1) turn off the ``Enable Bitcode`` in your XCode Build Option or (2) upzip and replace the original library with the one with bitcode support at ``engine/backup/plugin/ios_bitcode/libUIWidgets.a.zip``.
       
 ## Contact Us
 
