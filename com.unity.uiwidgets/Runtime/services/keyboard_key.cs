@@ -474,19 +474,19 @@ namespace Unity.UIWidgets.services {
 
 
         public static readonly LogicalKeyboardKey arrowRight =
-            new LogicalKeyboardKey(0x0010007004f, debugName: foundation_.kReleaseMode ? null : "Arrow Right");
+            new LogicalKeyboardKey((long) KeyCode.RightArrow, debugName: foundation_.kReleaseMode ? null : "Arrow Right");
 
 
         public static readonly LogicalKeyboardKey arrowLeft =
-            new LogicalKeyboardKey(0x00100070050, debugName: foundation_.kReleaseMode ? null : "Arrow Left");
+            new LogicalKeyboardKey((long) KeyCode.LeftArrow, debugName: foundation_.kReleaseMode ? null : "Arrow Left");
 
 
         public static readonly LogicalKeyboardKey arrowDown =
-            new LogicalKeyboardKey(0x00100070051, debugName: foundation_.kReleaseMode ? null : "Arrow Down");
+            new LogicalKeyboardKey((long) KeyCode.DownArrow, debugName: foundation_.kReleaseMode ? null : "Arrow Down");
 
 
         public static readonly LogicalKeyboardKey arrowUp =
-            new LogicalKeyboardKey(0x00100070052, debugName: foundation_.kReleaseMode ? null : "Arrow Up");
+            new LogicalKeyboardKey((long) KeyCode.UpArrow, debugName: foundation_.kReleaseMode ? null : "Arrow Up");
 
 
         public static readonly LogicalKeyboardKey numLock =
