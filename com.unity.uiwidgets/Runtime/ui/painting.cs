@@ -2192,16 +2192,20 @@ namespace Unity.UIWidgets.ui {
         public override void DisposePtr(IntPtr ptr) {
             ImageShader_dispose(ptr);
         }
+        
+        static IntPtr ImageShader_constructor() {
+            throw new Exception("The native binding of ImageShader_constructor is not implemented yet!!");
+            return IntPtr.Zero;
+        }
 
-        [DllImport(NativeBindings.dllName)]
-        static extern IntPtr ImageShader_constructor();
+        static void ImageShader_dispose(IntPtr ptr) {
+            throw new Exception("The native binding of ImageShader_dispose is not implemented yet!!");
+        }
 
-        [DllImport(NativeBindings.dllName)]
-        static extern void ImageShader_dispose(IntPtr ptr);
-
-        [DllImport(NativeBindings.dllName)]
-        static extern unsafe void ImageShader_initWithImage(IntPtr ptr,
-            IntPtr image, int tmx, int tmy, float* matrix4);
+        static unsafe void ImageShader_initWithImage(IntPtr ptr,
+            IntPtr image, int tmx, int tmy, float* matrix4) {
+            throw new Exception("The native binding of ImageShader_initWithImage is not implemented yet!!");
+        }
     }
 
 

@@ -60,9 +60,11 @@ namespace Unity.UIWidgets.ui {
 
         delegate void Scene_toImageCallback(IntPtr callbackHandle, IntPtr result);
 
-        [DllImport(NativeBindings.dllName)]
-        static extern IntPtr Scene_toImage(IntPtr ptr, int width, int height, Scene_toImageCallback callback,
-            IntPtr callbackHandle);
+        static IntPtr Scene_toImage(IntPtr ptr, int width, int height, Scene_toImageCallback callback,
+            IntPtr callbackHandle) {
+                throw new Exception("The native binding of Scene_toImage is not implemented yet!!");
+                return IntPtr.Zero;
+            }
     }
 
     public abstract class _EngineLayerWrapper : EngineLayer {
