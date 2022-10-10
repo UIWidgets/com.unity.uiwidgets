@@ -61,12 +61,12 @@ https://github.com/UnityTech/DocCN 查看。
 
 UIWidgets的各个版本所需的Unity版本如下表所示。您可以从[https://unity.cn/releases](https://unity.cn/releases)下载最新的Unity。
 
-| UIWidgets 版本     |  Unity 2019 LTS  |  Unity 2020 LTS  | 
-| -----------------------------------------------| ------------------------- | ------------------------- |
-| 1.5.4 及以下     | 2019.4.10f1 及以上  | N\A |
-| 2.0.1   | 2019.4.26f1c1  | N\A |
-| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A |
-| 2.0.4及以上 | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 及以上 |
+| UIWidgets 版本     |  Unity 2019 LTS  |  Unity 2020 LTS  |   Unity 2021 LTS   |
+| -----------------------------------------------| ------------------------- | ------------------------- | ------------------------- |
+| 1.5.4 及以下     | 2019.4.10f1 及以上  | N\A | N\A |
+| 2.0.1   | 2019.4.26f1c1  | N\A | N\A |
+| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A | N\A |
+| 2.0.4及以上 | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 及以上 | 2021.3.11f1c2 and above |
 
 #### UIWidgets包
 
@@ -275,7 +275,7 @@ using(Isolate.getScope(the isolate of your App)) {
 
       由于UIWidgets 2.0在效果和效率上的优势，因此推荐大家使用。仅当您需要在UIWidgets 2.0暂时不支持的平台（如webgl）上开发时才推荐使用UIWidgets 1.0。此外，由于人力原因，目前只有UIWidgets 2.0我们会持续更新。
 
-3. 使用Unity 2020.3LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到**OpenGLES**库函数。
+3. 使用Unity 2020/2021 LTS打包UIWidgets 2.0的项目到iOS平台后Build失败，提示无法链接到**OpenGLES**库函数。
 
       这是因为在Unity 2020.3版本中Unity导出的iOS项目默认不再包含对OpenGLES库的依赖，但UIWidgets 2.0需要依赖该库。为了解决这个问题，您需要手动用Xcode打开项目并为UnityFramework添加上对OpenGLES库的依赖。
 

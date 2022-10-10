@@ -71,12 +71,12 @@ open-sourced @https://github.com/UnityTech/DocCN.
 
 Specifically, the compatible Unity versions for each UIWidgets release are listed below. You can download the latest Unity on [https://unity.cn/releases](https://unity.cn/releases).
 
-| UIWidgets version     |  Unity 2019 LTS  |  Unity 2020 LTS  | 
-| -----------------------------------------------| ------------------------- | ------------------------- |
-| 1.5.4 and below     | 2019.4.10f1 and above  | N\A |
-| 2.0.1   | 2019.4.26f1c1  | N\A |
-| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A |
-| 2.0.4 and above | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 and above |
+| UIWidgets version     |  Unity 2019 LTS  |  Unity 2020 LTS  |    Unity 2021 LTS   |
+| -----------------------------------------------| ------------------------- | ------------------------- | ------------------------- |
+| 1.5.4 and below     | 2019.4.10f1 and above  | N\A | N\A |
+| 2.0.1   | 2019.4.26f1c1  | N\A | N\A |
+| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A | N\A |
+| 2.0.4 and above | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 and above | 2021.3.11f1c2 and above |
 
 #### UIWidgets Package ([video tutorial](https://www.bilibili.com/video/BV1zR4y1s7HN?share_source=copy_web))
 Visit our Github repository https://github.com/Unity-Technologies/com.unity.uiwidgets
@@ -300,7 +300,7 @@ this [section](#unity).
 
       For better rendering result, performance and continuous upgrade and support, you are always suggested to use UIWidgets 2.0 for your project. Use UIWidgets 1.0 only if you need to support specific target platforms like webgl.
 
-3. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
+3. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020/2021 LTS.
 
       This is caused by Unity because it removed the dependency on OpenGLES library on Unity 2020.3. To fix this issue, please open the XCode project and manually add the OpenGLES library to the UnityFramework target.
 
