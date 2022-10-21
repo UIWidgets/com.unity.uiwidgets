@@ -1871,10 +1871,10 @@ namespace Unity.UIWidgets.ui {
                 encodedFontFeatures = new byte[fontFeatures.Count * FontFeature._kEncodedSize];
                 var byteOffset = 0;
                 foreach (var feature in fontFeatures) {
-                    var byteFeature = new byte[FontFeature._kEncodedSize - byteOffset];
-                    Array.Copy(sourceArray: encodedFontFeatures, 0, destinationArray: byteFeature, 0,
-                        length: FontFeature._kEncodedSize);
+                    var byteFeature = new byte[FontFeature._kEncodedSize];
                     feature._encode(byteData: byteFeature);
+                    Array.Copy(sourceArray: byteFeature, 0, destinationArray: encodedFontFeatures, byteOffset,
+                        length: FontFeature._kEncodedSize);
                     byteOffset += FontFeature._kEncodedSize;
                 }
             }
