@@ -81,7 +81,7 @@ public partial class UIWidgetsPanelWrapper {
     #endregion
     
     #region Platform: MacOs/iOS Specific Functionalities
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS
+#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || (!UNITY_EDITOR && UNITY_IOS)
     public partial class UIWidgetsPanelWrapper {
         Texture _renderTexture;
 

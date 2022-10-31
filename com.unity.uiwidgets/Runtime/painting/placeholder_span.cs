@@ -6,7 +6,7 @@ using Unity.UIWidgets.gestures;
 using Unity.UIWidgets.ui;
 
 namespace Unity.UIWidgets.painting {
-    abstract class PlaceholderSpan : InlineSpan {
+    public abstract class PlaceholderSpan : InlineSpan {
         public PlaceholderSpan(
             TextBaseline? baseline = null,
             TextStyle style = null,

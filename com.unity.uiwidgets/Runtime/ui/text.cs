@@ -102,15 +102,15 @@ namespace Unity.UIWidgets.ui {
             return feature == other.feature && value == other.value;
         }
 
-        public FontFeature enable(string feature) {
+        public static FontFeature enable(string feature) {
             return new FontFeature(feature: feature);
         }
 
-        public FontFeature disable(string feature) {
+        public static FontFeature disable(string feature) {
             return new FontFeature(feature: feature, 0);
         }
 
-        public FontFeature randomize() {
+        public static FontFeature randomize() {
             return new FontFeature("rand");
         }
 
@@ -120,19 +120,19 @@ namespace Unity.UIWidgets.ui {
             return new FontFeature($"ss{value.ToString().PadLeft(2, '0')}");
         }
 
-        public FontFeature slashedZero() {
+        public static FontFeature slashedZero() {
             return new FontFeature("zero");
         }
 
-        public FontFeature oldstyleFigures() {
+        public static FontFeature oldstyleFigures() {
             return new FontFeature("onum");
         }
 
-        public FontFeature proportionalFigures() {
+        public static FontFeature proportionalFigures() {
             return new FontFeature("pnum");
         }
 
-        public FontFeature tabularFigures() {
+        public static FontFeature tabularFigures() {
             return new FontFeature("tnum");
         }
 
