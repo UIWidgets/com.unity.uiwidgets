@@ -6,7 +6,7 @@ using Unity.UIWidgets.ui;
 using TextStyle = Unity.UIWidgets.painting.TextStyle;
 
 namespace Unity.UIWidgets.widgets {
-    class WidgetSpan : PlaceholderSpan, IEquatable<WidgetSpan> {
+    public class WidgetSpan : PlaceholderSpan, IEquatable<WidgetSpan> {
         public WidgetSpan(
             Widget child ,
             TextBaseline? baseline = null,
