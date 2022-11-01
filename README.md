@@ -91,8 +91,7 @@ Generally, you can make it using a console (or terminal) application by just a f
     git clone https://github.com/Unity-Technologies/com.unity.uiwidgets.git com.unity.uiwidgets
    ```
 
-Note that there are many native libraries we built for UIWidget 2.0 to boost its performance, which are large files and hosted by
-**Git Large File Storage**. You need to install [this service](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) first and then use it to fetch these libraries.
+Note that there are many relatively large native libraries (>50MB) we built for UIWidget 2.0 to boost its performance. As the result, the clone progress might be a bit slow. Please kindly wait for a while until completed. 
 
 Finally, in PackageManger of unity, select add local file. select ```package.json``` under ```/com.unity.uiwidgets```
 
