@@ -81,8 +81,7 @@ UIWidgets的各个版本所需的Unity版本如下表所示。您可以从[https
     git clone https://github.com/Unity-Technologies/com.unity.uiwidgets.git com.unity.uiwidgets
    ```
 
-此外，因为UIWidgets 2.0中为各个平台编译的C++动态库文件较大，我们使用了github提供的**Git Large File Storage**来管理它们以
-优化下载体验。为此，请您确保在下载UIWidgets前安装好该[服务](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)以便正确下载动态库文件。
+此外，因为UIWidgets 2.0中为各个平台编译的C++动态库文件较大，因此仓库克隆过程可能会比较耗时，烦请耐心等待下载完成。
 
 最后，在unity的PackageManager中，选择添加添加local file。选中```/com.unity.uiwidgets```下的```package.json```。
 
