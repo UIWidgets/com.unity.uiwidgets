@@ -4,12 +4,13 @@ project(UIWidgetsPlugin VERSION 2.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set(FLUTTER_ROOT /Users/xingweizhu/WorkSpace/UnityApps/UIWidget/temp/engine_denpendencies/engine/src)
+set(FLUTTER_ROOT /home/xingweizhu/Public/uiwidgets/engine/src)
 set(SKIA_ROOT ${FLUTTER_ROOT}/third_party/skia)
 
 set(UIWidgetsInc
@@ -173,6 +174,22 @@ set(UIWidgetsMacSrc
         src/shell/platform/unity/darwin/macos/unity_external_texture_gl.mm          
 )
 
+set(UIWidgetsLinuxInc
+    src/shell/platform/unity/linux/uiwidgets_panel.h
+    src/shell/platform/unity/linux/uiwidgets_system.h
+    src/shell/platform/unity/linux/linux_task_runner.h
+    src/shell/platform/unity/linux/unity_surface_manager.h
+    src/shell/platform/unity/linux/unity_external_texture_gl.h
+)
+
+set(UIWidgetsLinuxSrc 
+        src/shell/platform/unity/linux/uiwidgets_panel.cc
+        src/shell/platform/unity/linux/uiwidgets_system.cc 
+        src/shell/platform/unity/linux/linux_task_runner.cc    
+        src/shell/platform/unity/linux/unity_surface_manager.cc  
+        src/shell/platform/unity/linux/unity_external_texture_gl.cc      
+)
+
 
 set(UIWidgetsSrc 
 
@@ -314,7 +331,7 @@ set(UIWidgetsSrc
     src/engine.cc
 )
 
-add_library(uiwidgets SHARED ${UIWidgetsSrc} ${UIWidgetsMacSrc} ${UIWidgetsInc} ${UIWidgetsMacInc})
+add_library(uiwidgets SHARED ${UIWidgetsSrc} ${UIWidgetsLinuxSrc} ${UIWidgetsInc} ${UIWidgetsLinuxInc})
 
 
 #includes
@@ -330,11 +347,14 @@ target_include_directories(uiwidgets PUBLIC
                                 ${SKIA_ROOT}/third_party/externals/icu/source/common
                                 ${FLUTTER_ROOT}/third_party/icu/source/common
                                 ${FLUTTER_ROOT}/third_party/icu/source/i18n
+                                ${FLUTTER_ROOT}/third_party/libcxx/include
+                                ${FLUTTER_ROOT}/third_party/libcxxabi/include
 )
 
 
 #custom compilation flag area
-target_compile_options(uiwidgets PUBLIC -Wno-c++11-narrowing -fno-exceptions -fno-rtti -g -fno-strict-aliasing -ffunction-sections -fdata-sections -fmessage-length=0 -pipe)
+#target_compile_options(uiwidgets PUBLIC -Wno-c++11-narrowing -fno-exceptions -fno-rtti -g -fno-strict-aliasing -ffunction-sections -fdata-sections -fmessage-length=0 -pipe)
+target_compile_options(uiwidgets PUBLIC -MD -MF -fno-strict-aliasing -fstack-protector --param=ssp-buffer-size=4 -m64 -march=x86-64 -fPIC -pipe -pthread -fcolor-diagnostics -fvisibility=hidden -Wstring-conversion -O0 -g2 -g3 -ggdb3 -fno-rtti -fno-exceptions -Wimplicit-fallthrough -O3 -fvisibility-inlines-hidden -std=c++17 -fno-rtti -nostdinc++ -fno-exceptions)
 
 target_compile_options(uiwidgets PUBLIC -MD -MF -I. -Ithird_party -Isrc -I${FLUTTER_ROOT} -I${FLUTTER_ROOT}/third_party/rapidjson/include -I${SKIA_ROOT} -I${FLUTTER_ROOT}/flutter/third_party/txt/src -I${FLUTTER_ROOT}/third_party/harfbuzz/src -I${SKIA_ROOT}/third_party/externals/icu/source/common -I${FLUTTER_ROOT}/third_party/icu/source/common -I${FLUTTER_ROOT}/third_party/icu/source/i18n -fvisibility-inlines-hidden)
 
@@ -355,10 +375,36 @@ U_ENABLE_DYLOAD=0 USE_CHROMIUM_ICU=1 U_STATIC_IMPLEMENTATION ICU_UTIL_DATA_IMPL=
 target_compile_definitions(uiwidgets PUBLIC RAPIDJSON_HAS_STDSTRING RAPIDJSON_HAS_CXX11_RANGE_FOR RAPIDJSON_HAS_CXX11_RVALUE_REFS RAPIDJSON_HAS_CXX11_TYPETRAITS RAPIDJSON_HAS_CXX11_NOEXCEPT USE_OPENSSL=1 __STDC_CONSTANT_MACROS __STDC_FORMAT_MACROS _FORTIFY_SOURCE=2 _LIBCPP_DISABLE_AVAILABILITY=1 _LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS _DEBUG)
 
 
+#https://github.com/MirServer/mir/pull/1087
+
+target_compile_definitions(uiwidgets PUBLIC GL_GLEXT_PROTOTYPES EGL_NO_X11)
+
 #custom link
-target_link_libraries(uiwidgets "-framework Foundation")
-target_link_libraries(uiwidgets "-framework ApplicationServices")
-target_link_libraries(uiwidgets "-framework OpenGL")
-target_link_libraries(uiwidgets "-framework AppKit")
-target_link_libraries(uiwidgets "-framework CoreVideo")
+#custom link
 target_link_libraries(uiwidgets ${FLUTTER_ROOT}/out/host_debug_unopt/obj/flutter/third_party/txt/libtxt_lib.a)
+
+#target_link_libraries(uiwidgets "gcc")
+target_link_libraries(uiwidgets "c")
+target_link_libraries(uiwidgets "c++")
+target_link_libraries(uiwidgets "m")
+target_link_libraries(uiwidgets "GL")
+target_link_libraries(uiwidgets "EGL")
+target_link_libraries(uiwidgets "pthread")
+target_link_libraries(uiwidgets "stdc++")
+
+#target_link_directories(uiwidgets PUBLIC "/home/xingweizhu/Public/uiwidgets/engine/src/buildtools/linux-x64/clang/lib/clang/8.0.0/x86_64-linux-gnu/lib/")
+target_link_directories(uiwidgets PUBLIC "/usr/lib/llvm-10/lib")
+
+
+#sudo apt install libc++abi-dev
+target_link_libraries(uiwidgets -Wl,--start-group dl)
+
+#target_link_libraries(uiwidgets "-framework Foundation")
+#target_link_libraries(uiwidgets "-framework ApplicationServices")
+#target_link_libraries(uiwidgets "-framework OpenGL")
+#target_link_libraries(uiwidgets "-framework AppKit")
+#target_link_libraries(uiwidgets "-framework CoreVideo")
+#target_link_libraries(uiwidgets "glut")
+#target_link_libraries(uiwidgets "GLU")
+#target_link_libraries(uiwidgets "GL")
+#target_link_libraries(uiwidgets ${FLUTTER_ROOT}/out/host_debug_unopt/obj/flutter/third_party/txt/libtxt_lib.a)
