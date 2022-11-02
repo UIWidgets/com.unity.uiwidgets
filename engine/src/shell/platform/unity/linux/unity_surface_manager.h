@@ -1,11 +1,11 @@
 #pragma once
 
 // OpenGL ES and EGL includes
-//#include <EGL/eglext.h>
-//#include <EGL/eglplatform.h>
-//#include <EGL/egl.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <EGL/eglplatform.h>
 #include <GL/gl.h>
-#include <GL/glx.h>
+//#include <GL/glx.h>
 
 #ifdef Status
 #undef Status
@@ -55,7 +55,7 @@ namespace uiwidgets
 
     bool ClearCurrent();
 
-    bool MakeCurrent(GLXDrawable drawable);
+    bool MakeCurrent(const EGLSurface surface);
 
     bool MakeResourceCurrent();
 
@@ -65,9 +65,9 @@ namespace uiwidgets
     bool Initialize(IUnityInterfaces *unity_interfaces);
     void CleanUp();
 
-    GLXContext gl_context_;
-    GLXContext gl_resource_context_;
-    XVisualInfo* gl_config_;
+    EGLContext egl_context_;
+    EGLContext egl_resource_context_;
+    EGLConfig egl_config_;
 
     bool initialize_succeeded_;
 

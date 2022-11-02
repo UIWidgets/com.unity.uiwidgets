@@ -17,12 +17,10 @@ enum UIWidgetsWindowType {
   EditorWindowPanel = 2
 };
 
-enum UIWidgetsTouchPhase
-{
-  TouchBegan,
-  TouchEnded,
-  TouchMoved,
-  TouchCancelled
+struct MouseState {
+  bool state_is_down = false;
+  bool state_is_added = false;
+  uint64_t buttons = 0;
 };
 
 class UIWidgetsPanel : public fml::RefCountedThreadSafe<UIWidgetsPanel> {
@@ -57,15 +55,23 @@ class UIWidgetsPanel : public fml::RefCountedThreadSafe<UIWidgetsPanel> {
 
   void VSyncCallback(intptr_t baton);
   
+  void SetEventLocationFromCursorPosition(UIWidgetsPointerEvent* event_data);
+
   void OnKeyDown(int keyCode, bool isKeyDown, int64_t modifier);
 
-  void OnMouseMove(float x, float y, int button);
+  void OnMouseMove(float x, float y);
+
+  void OnScroll(float x, float y, float px, float py);
 
   void OnMouseDown(float x, float y, int button);
 
   void OnMouseUp(float x, float y, int button);
 
   void OnMouseLeave();
+
+  void OnDragUpdateInEditor(float x, float y);
+
+  void OnDragReleaseInEditor(float x, float y);
 
   bool NeedUpdateByPlayerLoop();
 
@@ -74,11 +80,31 @@ class UIWidgetsPanel : public fml::RefCountedThreadSafe<UIWidgetsPanel> {
  private:
   UIWidgetsPanel(Mono_Handle handle, UIWidgetsWindowType window_type, EntrypointCallback entrypoint_callback);
 
-  void dispatchTouches(float x, float y, int button, UIWidgetsTouchPhase evtType);
+  MouseState GetMouseState() { return mouse_state_; }
 
-  static PointerData::Change PointerDataChangeFromUITouchPhase(UIWidgetsTouchPhase phase);
-  
-  static PointerData::DeviceKind DeviceKindFromTouchType();
+  void ResetMouseState() { mouse_state_ = MouseState(); }
+
+  void SetMouseStateDown(bool is_down) { mouse_state_.state_is_down = is_down; }
+
+  void SetMouseStateAdded(bool is_added) {
+    mouse_state_.state_is_added = is_added;
+  }
+
+  void SetMouseButtons(uint64_t buttons) { mouse_state_.buttons = buttons; }
+
+  void SendMouseMove(float x, float y);
+
+  void SendMouseDown(float x, float y);
+
+  void SendMouseUp(float x, float y);
+
+  void SendMouseLeave();
+
+  void SendScroll(float delta_x, float delta_y, float px, float py);
+
+  void SetEventPhaseFromCursorButtonState(UIWidgetsPointerEvent* event_data);
+
+  void SendPointerEventWithData(const UIWidgetsPointerEvent& event_data);
   
   Mono_Handle handle_;
   UIWidgetsWindowType window_type_;
@@ -93,6 +119,7 @@ class UIWidgetsPanel : public fml::RefCountedThreadSafe<UIWidgetsPanel> {
 
   std::vector<intptr_t> vsync_batons_;
 
+  MouseState mouse_state_;
   bool process_events_ = false;
 };
 
