@@ -18,12 +18,15 @@ namespace uiwidgets
   static EGLDisplay egl_display_;
   static EGLContext egl_unity_context_;
 
+
+
   template <class T>
   using EGLResult = std::pair<bool, T>;
 
   UnitySurfaceManager::UnitySurfaceManager(IUnityInterfaces *unity_interfaces)
       : egl_context_(EGL_NO_CONTEXT),
-        egl_resource_context_(EGL_NO_CONTEXT)
+        egl_resource_context_(EGL_NO_CONTEXT),
+        unity_previous_gl_context_(EGL_NO_CONTEXT)
   {
     initialize_succeeded_ = Initialize(unity_interfaces);
   }
@@ -57,18 +60,40 @@ namespace uiwidgets
   {
     //THIS API will crash the Editor since it might mistakenly clear the Unity's internal context
     //We should find out a way to fix it though
-    //return eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE,
-    //                      EGL_NO_CONTEXT) == EGL_TRUE;
+    bool suc = eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE,
+                          EGL_NO_CONTEXT) == EGL_TRUE;
+    
+    if (unity_previous_gl_context_ != EGL_NO_CONTEXT)
+    {
+      eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE, unity_previous_gl_context_);
+      unity_previous_gl_context_ = EGL_NO_CONTEXT;
+    }
+
+    return suc;
   }
 
   bool UnitySurfaceManager::MakeCurrent(const EGLSurface surface)
   {
+    EGLContext _pre_context = eglGetCurrentContext();
+    if (_pre_context != EGL_NO_CONTEXT && _pre_context != egl_context_ &&
+      _pre_context != egl_resource_context_)
+    {
+      unity_previous_gl_context_ = _pre_context;
+    }
+
     return eglMakeCurrent(egl_display_, surface, surface, egl_context_) ==
            EGL_TRUE;
   }
 
   bool UnitySurfaceManager::MakeResourceCurrent()
   {
+    EGLContext _pre_context = eglGetCurrentContext();
+    if (_pre_context != EGL_NO_CONTEXT && _pre_context != egl_context_ &&
+      _pre_context != egl_resource_context_)
+    {
+      unity_previous_gl_context_ = _pre_context;
+    }
+
     return eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE,
                           egl_resource_context_) == EGL_TRUE;
   }

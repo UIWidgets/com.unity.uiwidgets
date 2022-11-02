@@ -271,7 +271,7 @@ namespace Unity.UIWidgets.engine {
             return true;
         }
 #endif
-#if UNITY_IOS || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#if UNITY_IOS || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
         void InitializeOpenGL() {
             OpenGLCoreUtil.RenderTextureCreateFailureWorkaround();
             OpenGLCoreUtil.Init();
@@ -304,6 +304,13 @@ namespace Unity.UIWidgets.engine {
             if (!IsAndroidInitialized()) {return ;}
 #endif
 #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+            if (type == GraphicsDeviceType.OpenGLCore) {
+                InitializeOpenGL();
+                base.OnEnable();
+                return;
+            }
+#endif
+#if UNITY_EDITOR_LINUX
             if (type == GraphicsDeviceType.OpenGLCore) {
                 InitializeOpenGL();
                 base.OnEnable();

@@ -71,6 +71,8 @@ namespace uiwidgets
 
     bool initialize_succeeded_;
 
+    EGLContext unity_previous_gl_context_;
+
     GLuint fbo_ = 0;
   };
 

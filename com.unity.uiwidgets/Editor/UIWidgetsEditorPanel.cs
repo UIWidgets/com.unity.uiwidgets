@@ -94,10 +94,23 @@ namespace Unity.UIWidgets.Editor {
         }
 #endif
         
+#if UNITY_EDITOR_LINUX
+        void TryInitializeOpenGLCoreOnLinuxEditor() {
+            var type = SystemInfo.graphicsDeviceType;
+            if (type != GraphicsDeviceType.OpenGLCore) {
+                return;
+            }
+            OpenGLCoreUtil.RenderTextureCreateFailureWorkaround();
+            OpenGLCoreUtil.Init();
+        }
+#endif
         void OnEnable() {
             _needWaitToEnable = true;
 #if UNITY_EDITOR_OSX
             TryInitializeOpenGLCoreOnMacEditor();
+#endif
+#if UNITY_EDITOR_LINUX
+            TryInitializeOpenGLCoreOnLinuxEditor();
 #endif
             startCoroutine(DoEnableAfterOneFrame());
         }
