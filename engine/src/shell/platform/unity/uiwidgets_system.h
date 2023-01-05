@@ -10,4 +10,6 @@
     #endif
 #elif _WIN64
     #include "shell/platform/unity/windows/uiwidgets_system.h"
+#else //linux
+    #include "shell/platform/unity/linux/uiwidgets_system.h"
 #endif

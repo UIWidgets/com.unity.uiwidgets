@@ -38,6 +38,11 @@ static class BuildUtils
     {
         return RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
     }
+
+    public static bool IsHostLinux()
+    {
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    }
 }
 
 //ios build helpers
@@ -274,6 +279,11 @@ class Build
             DeployAndroid();
             DeployAndroid(true);
             DeployIOS();
+        }
+        //avaiable target platform of Linux
+        else if (BuildUtils.IsHostLinux())
+        {
+            Console.WriteLine("LaLaLa");
         }
     }
 

@@ -19,6 +19,10 @@ const uint64_t GetCurrentThreadId() {
 uint64_t GetCurrentThreadId() { 
   return gettid();
 }
+#else   //linux
+uint64_t GetCurrentThreadId() { 
+  return gettid();
+}
 #endif
 namespace uiwidgets {
 
