@@ -195,7 +195,7 @@ namespace Unity.UIWidgets.widgets {
 
         public float getPageFromPixels(float pixels, float viewportDimension) {
             float actual = Mathf.Max(0.0f, pixels - _initialPageOffset) / Mathf.Max(1.0f, viewportDimension * viewportFraction);
-            float round = (int)actual * 1.0f;
+            float round = Mathf.Round(actual);
             if ((actual - round).abs() < 1e-10) {
                 return round;
             }
@@ -234,12 +234,17 @@ namespace Unity.UIWidgets.widgets {
             if (haveViewportDimension) {
                 oldViewportDimensions = this.viewportDimension;
             }
+
+            if (viewportDimension == oldViewportDimensions) {
+                return true;
+            }
             
             bool result = base.applyViewportDimension(viewportDimension);
             float? oldPixels = null;
             if (havePixels) {
                 oldPixels = pixels;
             }
+            
             float page = (oldPixels == null || oldViewportDimensions == 0.0f)
                 ? _pageToUseOnStartup
                 : getPageFromPixels(oldPixels.Value, oldViewportDimensions);
