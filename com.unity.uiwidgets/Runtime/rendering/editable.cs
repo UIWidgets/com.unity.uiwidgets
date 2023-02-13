@@ -1290,6 +1290,10 @@ namespace Unity.UIWidgets.rendering {
             get { return _textPainter.preferredLineHeight; }
         }
 
+        private float preferredCursorHeight {
+            get { return _textPainter.preferredCursorHeight; }
+        }
+
         float _preferredHeight(float width) {
             bool lockedMax = maxLines != null && minLines == null;
             bool lockedBoth = maxLines != null && minLines == maxLines;
@@ -1537,14 +1541,26 @@ namespace Unity.UIWidgets.rendering {
                 switch (Application.platform) {
                     case RuntimePlatform.IPhonePlayer:
                         return Rect.fromLTWH(0.0f, 0.0f, cursorWidth,
-                            preferredLineHeight + 2.0f);
+                            preferredCursorHeight + 2.0f);
                     default:
-                        return Rect.fromLTWH(0.0f, EditableUtils._kCaretHeightOffset, cursorWidth,
-                            preferredLineHeight - 2.0f * EditableUtils._kCaretHeightOffset);
+                        return Rect.fromLTWH(0.0f, 0.0f, cursorWidth,
+                            preferredCursorHeight);
                 }
             }
         }
-
+        
+        Rect _getCaretPrototypeForEmptyLine {
+            get {
+                switch (Application.platform) {
+                    case RuntimePlatform.IPhonePlayer:
+                        return Rect.fromLTWH(0.0f, 0.0f, cursorWidth,
+                            preferredCursorHeight + 2.0f);
+                    default:
+                        return Rect.fromLTWH(0.0f, (preferredLineHeight - preferredCursorHeight) / 2, cursorWidth,
+                            preferredCursorHeight);
+                }
+            }
+        }
 
         protected override void performLayout() {
             BoxConstraints constraints = this.constraints;
@@ -1577,13 +1593,21 @@ namespace Unity.UIWidgets.rendering {
                    _textLayoutLastMinWidth == constraints.minWidth,
                 () => $"Last width ({_textLayoutLastMinWidth}, {_textLayoutLastMaxWidth}) not the same as max width constraint ({constraints.minWidth}, {constraints.maxWidth}).");
             var paint = new Paint() {color = _floatingCursorOn ? backgroundCursorColor : _cursorColor};
-            var caretOffset = _textPainter.getOffsetForCaret(textPosition, _caretPrototype) + effectiveOffset;
-            Rect caretRect = _caretPrototype.shift(caretOffset);
+
+            //if there is no contents in this editable yet, we use the _getCaretPrototypeForEmptyLine API to fetch the proper caret height
+            var currentCaretPrototype = _caretPrototype;
+            if (text.text == "") {
+                currentCaretPrototype = _getCaretPrototypeForEmptyLine;
+            }
+            
+            var caretOffset = _textPainter.getOffsetForCaret(textPosition, currentCaretPrototype) + effectiveOffset;
+            Rect caretRect = currentCaretPrototype.shift(caretOffset);
+            
             if (_cursorOffset != null) {
                 caretRect = caretRect.shift(_cursorOffset);
             }
-            
-            float? caretHeight = _textPainter.getFullHeightForCaret(textPosition, _caretPrototype);
+
+            float? caretHeight = _textPainter.getFullHeightForCaret(textPosition, currentCaretPrototype);
             if (caretHeight != null) {
                 switch (Application.platform) {
                     case RuntimePlatform.IPhonePlayer:
@@ -1598,7 +1622,7 @@ namespace Unity.UIWidgets.rendering {
                     default:
                         caretRect = Rect.fromLTWH(
                             caretRect.left,
-                            caretRect.top - EditableUtils._kCaretHeightOffset,
+                            caretRect.top,
                             caretRect.width,
                             caretHeight.Value
                         );
@@ -1607,7 +1631,7 @@ namespace Unity.UIWidgets.rendering {
             }
 
             caretRect = caretRect.shift(_getPixelPerfectCursorOffset(caretRect));
-
+            
             if (cursorRadius == null) {
                 canvas.drawRect(caretRect, paint);
             }
