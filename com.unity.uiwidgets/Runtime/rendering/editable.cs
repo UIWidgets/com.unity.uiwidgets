@@ -1553,7 +1553,7 @@ namespace Unity.UIWidgets.rendering {
             get {
                 switch (Application.platform) {
                     case RuntimePlatform.IPhonePlayer:
-                        return Rect.fromLTWH(0.0f, 0.0f, cursorWidth,
+                        return Rect.fromLTWH(0.0f, (preferredLineHeight - preferredCursorHeight) / 2, cursorWidth,
                             preferredCursorHeight + 2.0f);
                     default:
                         return Rect.fromLTWH(0.0f, (preferredLineHeight - preferredCursorHeight) / 2, cursorWidth,
