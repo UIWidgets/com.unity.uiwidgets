@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Unity.UIWidgets.engine {
     
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS
+#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_EDITOR_LINUX
     public static class OpenGLCoreUtil {
         [DllImport(NativeBindings.dllName)]
         static extern System.IntPtr GetUnityContextEventFunc();

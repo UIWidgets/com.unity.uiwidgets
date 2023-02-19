@@ -60,16 +60,16 @@ class UnitySurfaceManager {
   static NSOpenGLContext *unity_gl_context_;       //used for OpenGLCore only
   NSOpenGLContext *unity_previous_gl_context_ = nil;
   
-  NSOpenGLContext *gl_context_;
-  NSOpenGLContext *gl_resource_context_;
+  NSOpenGLContext *gl_context_ = nil;
+  NSOpenGLContext *gl_resource_context_ = nil;
   GLuint default_fbo_ = 0;
   GLuint gl_tex_ = 0;
   CVOpenGLTextureCacheRef gl_tex_cache_ref_ = nullptr;
   CVOpenGLTextureRef gl_tex_ref_ = nullptr;
 
   //metal handlers
-  id<MTLDevice> metal_device_;
-  id<MTLTexture> metal_tex_;
+  id<MTLDevice> metal_device_ = nullptr;
+  id<MTLTexture> metal_tex_ = nullptr;
   CVMetalTextureRef metal_tex_ref_ = nullptr;
   CVMetalTextureCacheRef metal_tex_cache_ref_ = nullptr;
 };
