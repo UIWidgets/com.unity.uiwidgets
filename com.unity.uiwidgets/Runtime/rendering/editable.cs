@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Unity.UIWidgets.async;
 using Unity.UIWidgets.foundation;
 using Unity.UIWidgets.gestures;
@@ -1596,7 +1597,9 @@ namespace Unity.UIWidgets.rendering {
 
             //if there is no contents in this editable yet, we use the _getCaretPrototypeForEmptyLine API to fetch the proper caret height
             var currentCaretPrototype = _caretPrototype;
-            if (text.text == "") {
+            var content = new StringBuilder();
+            text.computeToPlainText(content, false, false);
+            if (string.IsNullOrEmpty(content.ToString())) {
                 currentCaretPrototype = _getCaretPrototypeForEmptyLine;
             }
             
@@ -1606,7 +1609,6 @@ namespace Unity.UIWidgets.rendering {
             if (_cursorOffset != null) {
                 caretRect = caretRect.shift(_cursorOffset);
             }
-
             float? caretHeight = _textPainter.getFullHeightForCaret(textPosition, currentCaretPrototype);
             if (caretHeight != null) {
                 switch (Application.platform) {
