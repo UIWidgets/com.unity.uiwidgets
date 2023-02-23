@@ -386,16 +386,18 @@ namespace Unity.UIWidgets.rendering {
             TextSelection nextSelection,
             SelectionChangedCause cause
         ) {
-            
-            bool focusingEmpty = nextSelection.baseOffset == 0
-                                       && nextSelection.extentOffset == 0
-                                       && !hasFocus;
+            //force to update selection no matter whether the selection really changes
+            //it should not affect the ui logics except some performance drop
+            /*bool focusingEmpty = nextSelection.baseOffset == 0
+                                 && nextSelection.extentOffset == 0
+                                 && !hasFocus;
             if (nextSelection == selection
                 && cause != SelectionChangedCause.keyboard
                 && !focusingEmpty) {
+                Debug.Log("[ZXW2] handle double tap6 <>>>");
                 return;
-            }
-
+            }*/
+            
             onSelectionChanged?.Invoke(nextSelection, this, cause);
         }
         
@@ -1459,7 +1461,7 @@ namespace Unity.UIWidgets.rendering {
                 ? firstWord
                 : _selectWordAtOffset(
                     _textPainter.getPositionForOffset(globalToLocal(to - _paintOffset)));
-
+            
             _handleSelectionChange(
                 new TextSelection(
                     baseOffset: firstWord.baseOffset,
@@ -1594,20 +1596,35 @@ namespace Unity.UIWidgets.rendering {
                    _textLayoutLastMinWidth == constraints.minWidth,
                 () => $"Last width ({_textLayoutLastMinWidth}, {_textLayoutLastMaxWidth}) not the same as max width constraint ({constraints.minWidth}, {constraints.maxWidth}).");
             var paint = new Paint() {color = _floatingCursorOn ? backgroundCursorColor : _cursorColor};
-
+            
+            //force offset to 0 (at the beginning of the text if the text is currently focused
+            if (hasFocus && textPosition.offset == -1)
+            {
+                textPosition = new TextPosition(0, textPosition.affinity);
+            }
             //if there is no contents in this editable yet, we use the _getCaretPrototypeForEmptyLine API to fetch the proper caret height
             var currentCaretPrototype = _caretPrototype;
             var content = new StringBuilder();
             text.computeToPlainText(content, false, false);
+            
+            //Debug.Log("[ZXW] text is " + content.ToString());
             if (string.IsNullOrEmpty(content.ToString())) {
                 currentCaretPrototype = _getCaretPrototypeForEmptyLine;
             }
             
+            //Debug.Log("[ZXW] caret offset is " + currentCaretPrototype.top + " " + _caretPrototype.top + " " + _getCaretPrototypeForEmptyLine.top);
+
+            
             var caretOffset = _textPainter.getOffsetForCaret(textPosition, currentCaretPrototype) + effectiveOffset;
+            
             Rect caretRect = currentCaretPrototype.shift(caretOffset);
+            
+            //Debug.Log("[ZXW] caretRect is " + effectiveOffset.dy + " " + caretOffset.dy + " " + caretRect.top);
+
             
             if (_cursorOffset != null) {
                 caretRect = caretRect.shift(_cursorOffset);
+                //Debug.Log("[ZXW] caretRect shift " + _cursorOffset.dy + " " + caretRect.top);
             }
             float? caretHeight = _textPainter.getFullHeightForCaret(textPosition, currentCaretPrototype);
             if (caretHeight != null) {
@@ -1628,11 +1645,15 @@ namespace Unity.UIWidgets.rendering {
                             caretRect.width,
                             caretHeight.Value
                         );
+                        
+                        //Debug.Log("[ZXW] caretRect final " + caretRect.height + " " + caretRect.top);
                         break;
                 }
             }
 
             caretRect = caretRect.shift(_getPixelPerfectCursorOffset(caretRect));
+            
+            //Debug.Log("[ZXW] caretRect pixel perfect " + caretRect.height + " " + caretRect.top);
             
             if (cursorRadius == null) {
                 canvas.drawRect(caretRect, paint);
