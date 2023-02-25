@@ -56,6 +56,7 @@ namespace Unity.UIWidgets.painting {
         TextDirection? _textDirection;
         float _textScaleFactor;
         Paragraph _layoutTemplate;
+        Paragraph _layoutCursorTemplate;
         Paragraph _paragraph;
         bool _needsLayout = true;
         int? _maxLines;
@@ -106,6 +107,7 @@ namespace Unity.UIWidgets.painting {
                 _textScaleFactor = value;
                 markNeedsLayout();
                 _layoutTemplate = null;
+                _layoutCursorTemplate = null;
             }
         }
 
@@ -131,6 +133,7 @@ namespace Unity.UIWidgets.painting {
 
                 if (!Equals(_text == null ? null : _text.style, value == null ? null : value.style)) {
                     _layoutTemplate = null;
+                    _layoutCursorTemplate = null;
                 }
 
                 _text = value;
@@ -155,6 +158,7 @@ namespace Unity.UIWidgets.painting {
                 _textDirection = value;
                 markNeedsLayout();
                 _layoutTemplate = null;
+                _layoutCursorTemplate = null;
             }
         }
 
@@ -449,6 +453,45 @@ namespace Unity.UIWidgets.painting {
                 ellipsis: ellipsis,
                 locale: locale
             );
+        }
+
+        ParagraphStyle _createParagraphStyleWithNoStrutStyle(TextDirection defaultTextDirection = TextDirection.ltr) {
+            D.assert(textDirection != null,
+                () => "TextPainter.textDirection must be set to a non-null value before using the TextPainter.");
+            return _text.style?.getParagraphStyle(
+                textAlign: textAlign,
+                textDirection: textDirection ?? defaultTextDirection,
+                textScaleFactor: textScaleFactor,
+                maxLines: _maxLines,
+                textHeightBehavior: _textHeightBehavior,
+                ellipsis: _ellipsis,
+                locale: _locale
+            ) ?? new ParagraphStyle(
+                textAlign: textAlign,
+                textDirection: textDirection ?? defaultTextDirection,
+                maxLines: maxLines,
+                textHeightBehavior: _textHeightBehavior,
+                ellipsis: ellipsis,
+                locale: locale
+            );
+        }
+
+        public float preferredCursorHeight {
+            get {
+                if (_layoutCursorTemplate == null) {
+                    var builder = new ParagraphBuilder(_createParagraphStyleWithNoStrutStyle(TextDirection.ltr)
+                    ); // direction doesn't matter, text is just a space
+                    if (text != null && text.style != null) {
+                        builder.pushStyle(text.style.getTextStyle(textScaleFactor: textScaleFactor));
+                    }
+
+                    builder.addText(" ");
+                    _layoutCursorTemplate = builder.build();
+                    _layoutCursorTemplate.layout(new ParagraphConstraints(float.PositiveInfinity));
+                }
+
+                return _layoutCursorTemplate.height();
+            }
         }
 
         public float preferredLineHeight {
