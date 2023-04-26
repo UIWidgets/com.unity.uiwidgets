@@ -71,12 +71,12 @@ open-sourced @https://github.com/UnityTech/DocCN.
 
 Specifically, the compatible Unity versions for each UIWidgets release are listed below. You can download the latest Unity on [https://unity.cn/releases](https://unity.cn/releases).
 
-| UIWidgets version     |  Unity 2019 LTS  |  Unity 2020 LTS  | 
-| -----------------------------------------------| ------------------------- | ------------------------- |
-| 1.5.4 and below     | 2019.4.10f1 and above  | N\A |
-| 2.0.1   | 2019.4.26f1c1  | N\A |
-| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A |
-| 2.0.4 and above | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 and above |
+| UIWidgets version     |  Unity 2019 LTS  |  Unity 2020 LTS  |    Unity 2021 LTS   |
+| -----------------------------------------------| ------------------------- | ------------------------- | ------------------------- |
+| 1.5.4 and below     | 2019.4.10f1 and above  | N\A | N\A |
+| 2.0.1   | 2019.4.26f1c1  | N\A | N\A |
+| 2.0.3   | 2019.4.26f1c1 ~ 2019.4.29f1c1 | N\A | N\A |
+| 2.0.4 and above | 2019.4.26f1c1 ~ 2019.4.29f1c1 | 2020.3.24f1c2 and above | 2021.3.11f1c2 and above |
 
 #### UIWidgets Package ([video tutorial](https://www.bilibili.com/video/BV1zR4y1s7HN?share_source=copy_web))
 Visit our Github repository https://github.com/Unity-Technologies/com.unity.uiwidgets
@@ -91,8 +91,7 @@ Generally, you can make it using a console (or terminal) application by just a f
     git clone https://github.com/Unity-Technologies/com.unity.uiwidgets.git com.unity.uiwidgets
    ```
 
-Note that there are many native libraries we built for UIWidget 2.0 to boost its performance, which are large files and hosted by
-**Git Large File Storage**. You need to install [this service](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) first and then use it to fetch these libraries.
+Note that there are many relatively large native libraries (>50MB) we built for UIWidget 2.0 to boost its performance. As the result, the clone progress might be a bit slow. Please kindly wait for a while until completed. 
 
 Finally, in PackageManger of unity, select add local file. select ```package.json``` under ```/com.unity.uiwidgets```
 
@@ -292,16 +291,7 @@ Meanwhile, you can join our [discussion channel](https://unity.cn/plate/uiwidget
 this [section](#unity).
 
 
-2. After openning a UIWidgets 2.0 project I receive an error **DllNotFoundException: libUIWidgets**.
-
-      Please make sure that the native libraries are correctly downloaded to your project. You can find them under *UIWidgetsPackageRoot*/Runtime/Plugins. For example, the libUIWidgets.dll under the sub folder *X86_64* is the native library for Windows and the libUIWidgets.dylib under *osx* is for Mac.
-
-      If the libraries are not there or their sizes are small (<1MB), please ensure that you have installed **Git Large File Storage** in your computer and then try the following command line inside the UIWidgets repository.
-      ```
-      git lfs pull
-      ```
-
-3. What is the difference between UIWidgets 2.0 and UIWidgets 1.0 ?
+2. What is the difference between UIWidgets 2.0 and UIWidgets 1.0 ?
 
       In UIWidgets 1.0 we used Unity [Graphics API](https://docs.unity3d.com/ScriptReference/Graphics.html) for the rendering and all rendering codes are writen in C#. Therefore it is able to run freely on all platforms that Unity supports but relatively slow. The rendering result is also not exactly the same as in flutter due to the difference between the Unity rendering engine and flutter engine.
 
@@ -309,9 +299,13 @@ this [section](#unity).
 
       For better rendering result, performance and continuous upgrade and support, you are always suggested to use UIWidgets 2.0 for your project. Use UIWidgets 1.0 only if you need to support specific target platforms like webgl.
 
-4. I encountered with a link error with OpenGLES for iOS build using UIWidgets 2.0 with Unity 2020.3LTS.
+3. I encountered with a link error with **OpenGLES** for iOS build using UIWidgets 2.0 with Unity 2020/2021 LTS.
 
       This is caused by Unity because it removed the dependency on OpenGLES library on Unity 2020.3. To fix this issue, please open the XCode project and manually add the OpenGLES library to the UnityFramework target.
+
+4. I encountered with a link error about **bitcode** for iOS when building UIWidgets 2.0 project using XCode.
+
+      This is because the current default libUIWidgets.a library in the ``com.unity.uiwidgets/Runtime/Plugin/ios`` folder is built without bitcode support. To address this issue, you can either (1) turn off the ``Enable Bitcode`` in your XCode Build Option or (2) upzip and replace the original library with the one with bitcode support at ``engine/backup/plugin/ios_bitcode/libUIWidgets.a.zip``.
       
 ## Contact Us
 

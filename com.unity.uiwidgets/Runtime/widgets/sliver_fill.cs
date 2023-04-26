@@ -25,7 +25,7 @@ namespace Unity.UIWidgets.widgets {
 
         public override Widget build(BuildContext context) { 
             return new _SliverFractionalPadding(
-                viewportFraction: padEnds ? ((int)(1 - viewportFraction).clamp(0f, 1f) / 2) : 0, 
+                viewportFraction: padEnds ? (1 - viewportFraction).clamp(0f, 1f) / 2f : 0f, 
                 sliver: new _SliverFillViewportRenderObjectWidget(
                     viewportFraction: viewportFraction, 
                     _delegate: _delegate
@@ -56,11 +56,11 @@ namespace Unity.UIWidgets.widgets {
     }
     public class _SliverFractionalPadding : SingleChildRenderObjectWidget {
         public _SliverFractionalPadding(
-            int viewportFraction = 0,
+            float viewportFraction = 0f,
             Widget sliver = null
         ) : base(child: sliver) {
-            D.assert(viewportFraction >= 0);
-            D.assert(viewportFraction <= 0.5);
+            D.assert(viewportFraction >= 0f);
+            D.assert(viewportFraction <= 0.5f);
             this.viewportFraction = viewportFraction;
         }
 

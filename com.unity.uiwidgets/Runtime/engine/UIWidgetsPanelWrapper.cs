@@ -81,7 +81,7 @@ public partial class UIWidgetsPanelWrapper {
     #endregion
     
     #region Platform: MacOs/iOS Specific Functionalities
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS
+#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || (!UNITY_EDITOR && UNITY_IOS)
     public partial class UIWidgetsPanelWrapper {
         Texture _renderTexture;
 
@@ -385,8 +385,9 @@ public partial class UIWidgetsPanelWrapper {
         [DllImport(dllName: NativeBindings.dllName)]
         static extern void UIWidgetsPanel_unregisterTexture(IntPtr ptr, int textureId);
 
-        [DllImport(dllName: NativeBindings.dllName)]
-        static extern void UIWidgetsPanel_markNewFrameAvailable(IntPtr ptr, int textureId);
+        static void UIWidgetsPanel_markNewFrameAvailable(IntPtr ptr, int textureId) {
+            throw new Exception("The native binding of UIWidgetsPanel_markNewFrameAvailable is not implemented yet!!");
+        }
 
 #if UNITY_EDITOR
         [DllImport(dllName: NativeBindings.dllName)]
@@ -487,8 +488,9 @@ public partial class UIWidgetsPanelWrapper {
             }
         }
 
-        [DllImport(dllName: NativeBindings.dllName)]
-        static extern void UIWidgetsPanel_onChar(IntPtr ptr, char c);
+        static void UIWidgetsPanel_onChar(IntPtr ptr, char c) {
+            throw new Exception("The native binding of UIWidgetsPanel_onChar is not implemented yet!!");
+        }
 
         [DllImport(dllName: NativeBindings.dllName)]
         static extern void UIWidgetsPanel_onKey(IntPtr ptr, KeyCode keyCode, bool isKeyDown, int modifier);
