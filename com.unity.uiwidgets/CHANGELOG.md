@@ -4,6 +4,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.5-preview.1] - 2025-11-19
+
+### Fixes
+- Fix d3d11 texture creation issue [\#32](https://github.com/UIWidgets/com.unity.uiwidgets/issues/32)
+
 ## [2.0.4-preview.1] - 2021-12-21
 
 ### Fixes
