@@ -49,7 +49,7 @@ public partial class UIWidgetsPanelWrapper {
         D.assert(native_tex_ptr != IntPtr.Zero);
 
         _renderTexture =
-            Texture2D.CreateExternalTexture(_width, _height, TextureFormat.BGRA32, false, true, native_tex_ptr);
+            Texture2D.CreateExternalTexture(_width, _height, TextureFormat.RGBA32, false, true, native_tex_ptr);
     }
 
     void _disableUIWidgetsPanel() {
@@ -62,7 +62,7 @@ public partial class UIWidgetsPanelWrapper {
         D.assert(native_tex_ptr != IntPtr.Zero);
 
         _renderTexture =
-            Texture2D.CreateExternalTexture(_width, _height, TextureFormat.BGRA32, false, true, native_tex_ptr);
+            Texture2D.CreateExternalTexture(_width, _height, TextureFormat.RGBA32, false, true, native_tex_ptr);
     }
 
     [DllImport(NativeBindings.dllName)]
@@ -138,7 +138,7 @@ public partial class UIWidgetsPanelWrapper {
                     Application.streamingAssetsPath, font_settings);
                 D.assert(native_tex_ptr != IntPtr.Zero);
                 _renderTexture =
-                    Texture2D.CreateExternalTexture(_width, _height, TextureFormat.BGRA32, false, true, native_tex_ptr);
+                    Texture2D.CreateExternalTexture(_width, _height, TextureFormat.RGBA32, false, true, native_tex_ptr);
             }
             else {
                 D.assert(_renderTexture != null && _renderTexture.GetNativeTexturePtr() != IntPtr.Zero);
@@ -154,7 +154,7 @@ public partial class UIWidgetsPanelWrapper {
                     UIWidgetsPanel_onRenderTexture(_ptr, IntPtr.Zero, _width, _height, devicePixelRatio);
                 D.assert(native_tex_ptr != IntPtr.Zero);
                 _renderTexture =
-                    Texture2D.CreateExternalTexture(_width, _height, TextureFormat.BGRA32, false, true, native_tex_ptr);
+                    Texture2D.CreateExternalTexture(_width, _height, TextureFormat.RGBA32, false, true, native_tex_ptr);
             }
             else {
                 D.assert(_renderTexture != null && _renderTexture.GetNativeTexturePtr() != IntPtr.Zero);
