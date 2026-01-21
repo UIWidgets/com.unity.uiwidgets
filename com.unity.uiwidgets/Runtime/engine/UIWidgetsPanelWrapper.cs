@@ -182,6 +182,71 @@ public partial class UIWidgetsPanelWrapper {
 #endif
 #endregion
 
+
+#if (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
+    public partial class UIWidgetsPanelWrapper {
+        RenderTexture _renderTexture;
+    
+    
+        public RenderTexture renderTexture {
+            get { return _renderTexture; }
+        }
+
+        public bool requireColorspaceShader => false;
+
+        void _createRenderTexture(int width, int height, float devicePixelRatio) {
+            D.assert(_renderTexture == null);
+
+            var colorSpace = useColorspaceGamma ? RenderTextureReadWrite.Linear
+                    : RenderTextureReadWrite.sRGB;
+            var graphicsFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.ARGB32, colorSpace);
+
+            var desc = new RenderTextureDescriptor(
+                width, height, graphicsFormat, 0) {
+                useMipMap = false,
+                autoGenerateMips = false,
+            };
+
+            _renderTexture = new RenderTexture(desc) {hideFlags = HideFlags.HideAndDontSave};
+            _renderTexture.Create();
+
+            _width = width;
+            _height = height;
+            this.devicePixelRatio = devicePixelRatio;
+        }
+
+        void _destroyRenderTexture() {
+            D.assert(_renderTexture != null);
+            ObjectUtils.SafeDestroy(_renderTexture);
+            _renderTexture = null;
+        }
+
+        void _enableUIWidgetsPanel(string font_settings) {
+            UIWidgetsPanel_onEnable(_ptr, _renderTexture.GetNativeTexturePtr(),
+                _width, _height, devicePixelRatio, Application.streamingAssetsPath, font_settings);
+        }
+
+        void _resizeUIWidgetsPanel() {
+            UIWidgetsPanel_onRenderTexture(_ptr,
+                _renderTexture.GetNativeTexturePtr(),
+                _width, _height, devicePixelRatio);
+        }
+
+        void _disableUIWidgetsPanel() {
+            _renderTexture = null;
+        }
+
+        [DllImport(NativeBindings.dllName)]
+        static extern void UIWidgetsPanel_onEnable(IntPtr ptr,
+            IntPtr nativeTexturePtr, int width, int height, float dpi, string streamingAssetsPath,
+            string font_settings);
+
+        [DllImport(NativeBindings.dllName)]
+        static extern void UIWidgetsPanel_onRenderTexture(
+            IntPtr ptr, IntPtr nativeTexturePtr, int width, int height, float dpi);
+    }
+#endif
+    
     #region Platform: Android Runtime Specific Functionalities
 
 #if (!UNITY_EDITOR && UNITY_ANDROID )

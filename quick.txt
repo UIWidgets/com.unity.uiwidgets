@@ -1,0 +1,83 @@
+build lib_txt:
+
+export PATH=$PATH:/home/xingweizhu/Public/uiwidgets/depot_tools
+ninja -C out/host_debug_unopt
+
+
+
+
+//attach the .so to Unity process
+ps -aux | grep -i /home/xingweizhu/Unity/Hub/Editor/2020.3.38f1c1/Editor/Unity
+
+//need use sudo otherwise you will fail
+sudo gdb libuiwidgets.so PCI
+
+
+//set so library search path
+set solib-search-path /home/xingweizhu/Public/uiwidgets/com.unity.uiwidgets/com.unity.uiwidgets/Runtime/Plugins/Linux/
+
+
+//make current source code directory
+dir /home/xingweizhu/Public/uiwidgets/com.unity.uiwidgets/engine/src/
+
+//don't let SIGs stop your program easily
+set auto-load safe-path /
+handle SIGXCPU SIG33 SIG35 SIG36 SIG37 SIG38 SIGPWR nostop noprint
+
+//open a source file
+list uiwidgets_panel.cc:1
+
+
+//br LINENUM
+add a break point at LINENUM
+
+
+//need disable invalid occurence of the breakpoints if you encounter with issues like: (which usually means that the occurence at the given address is invalid)
+//Warning:
+//Cannot insert breakpoint 1.
+//Cannot access memory at address 0x80487d4
+
+//Command aborted.
+
+//you can use this to disable it
+info breakpoints
+
+//find the id of the invalid occurence (looks like X.Y)
+disable X.Y
+
+//then try again
+cont
+
+
+
+set solib-search-path /home/xingweizhu/Public/uiwidgets/com.unity.uiwidgets/com.unity.uiwidgets/Runtime/Plugins/Linux/
+dir /home/xingweizhu/Public/uiwidgets/com.unity.uiwidgets/engine/src/
+set auto-load safe-path /
+handle SIGXCPU SIG33 SIG35 SIG36 SIG37 SIG38 SIGPWR nostop noprint
+list uiwidgets_panel.cc:1
+br 408
+br 427
+disable 1.1
+disable 2.1
+
+
+set solib-search-path /home/xingweizhu/Public/UnityProjects/MyProject/Packages/com.unity.uiwidgets/Runtime/Plugins/Linux/
+dir /home/xingweizhu/Public/uiwidgets/com.unity.uiwidgets/engine/src/
+set auto-load safe-path /
+handle SIGXCPU SIG33 SIG35 SIG36 SIG37 SIG38 SIGPWR nostop noprint
+list uiwidgets_panel.cc:1
+br 408
+br 427
+disable 1.1
+disable 2.1
+
+
+
+
+
+
+
+//quick
+export CLOUD_EDITOR_PATH=/engine/unity/build/LinuxEditor/x64/Debug/Unity
+export CLOUD_EDITOR_PROJECT_PATH=/home/xingweizhu/Public/UnityProjects/MyProject/
+

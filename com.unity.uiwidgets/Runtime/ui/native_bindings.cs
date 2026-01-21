@@ -5,6 +5,8 @@ namespace Unity.UIWidgets.ui {
     public class NativeBindings {
 #if (UNITY_IOS || UNITY_TVOS || UNITY_WEBGL) && !UNITY_EDITOR
         internal const string dllName = "__Internal";
+#elif (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
+        internal const string dllName = "UIWidgets";
 #else
         internal const string dllName = "libUIWidgets";
 #endif
