@@ -57,3 +57,7 @@ build.bat.meta
 Samples/Assets/Plugins/**
 engine/build/**
 engine/third_party/skia
+engine/src/flutter/**
+engine/src/out/**
+engine/src/third_party/**
+.vscode/**

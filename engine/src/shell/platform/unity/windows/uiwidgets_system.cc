@@ -22,12 +22,16 @@ void UIWidgetsSystem::UnregisterPanel(UIWidgetsPanel* panel) {
 
 void UIWidgetsSystem::Wait(std::chrono::nanoseconds max_duration) {
   Update();
+
+  // 使用std::chrono::duration_cast进行更安全的转换
+  auto duration_seconds = std::chrono::duration<double>(unity_uiwidgets_->GetEstimatedNextCallDuration());
+  std::chrono::nanoseconds internal_max_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(duration_seconds);
 	
   std::chrono::nanoseconds wait_duration =
       std::max(std::chrono::nanoseconds(0),
                next_uiwidgets_event_time_ - TimePoint::clock::now());
 
-  wait_duration = std::min(max_duration, wait_duration);
+  wait_duration = std::min(internal_max_duration, wait_duration);
   wait_duration = std::max(std::chrono::nanoseconds(0), wait_duration);
 
   ::MsgWaitForMultipleObjects(0, nullptr, FALSE,
@@ -85,17 +89,9 @@ void UIWidgetsSystem::BindUnityInterfaces(IUnityInterfaces* unity_interfaces) {
   unity_interfaces_ = unity_interfaces;
 
   unity_uiwidgets_ = unity_interfaces_->Get<UnityUIWidgets::IUnityUIWidgets>();
-  unity_uiwidgets_->SetUpdateCallback(_Update);
-  unity_uiwidgets_->SetVSyncCallback(_VSync);
-  unity_uiwidgets_->SetWaitCallback(_Wait);
-  unity_uiwidgets_->SetWakeUpCallback(_WakeUp);
 }
 
 void UIWidgetsSystem::UnBindUnityInterfaces() {
-  unity_uiwidgets_->SetUpdateCallback(nullptr);
-  unity_uiwidgets_->SetVSyncCallback(nullptr);
-  unity_uiwidgets_->SetWaitCallback(nullptr);
-  unity_uiwidgets_->SetWakeUpCallback(nullptr);
   unity_uiwidgets_ = nullptr;
 
   unity_interfaces_ = nullptr;
@@ -105,3 +101,43 @@ UIWidgetsSystem* UIWidgetsSystem::GetInstancePtr() {
   return &g_uiwidgets_system;
 }
 }  // namespace uiwidgets
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendUpdateEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_Update();
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendVSyncEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_VSync();
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendWaitEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_Wait(0l);
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendWakeUpEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_WakeUp();
+  }
+}

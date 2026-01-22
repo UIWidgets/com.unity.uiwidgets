@@ -45,7 +45,6 @@ class UIWidgetsSystem {
 
   FML_DISALLOW_COPY_AND_ASSIGN(UIWidgetsSystem);
 
- private:
   UIWIDGETS_CALLBACK(void) _Update() {
   GetInstancePtr()->Update();
   }
@@ -67,6 +66,7 @@ class UIWidgetsSystem {
     eglMakeCurrent(display, draw, read, context);
   }
 
+private:
   void Update();
   void Wait(std::chrono::nanoseconds max_duration);
   void VSync();
@@ -81,6 +81,7 @@ class UIWidgetsSystem {
 
   TimePoint next_uiwidgets_event_time_ = TimePoint::clock::now();
   std::set<UIWidgetsPanel*> uiwidgets_panels_;
+  std::mutex task_mutex_;
 };
 
 }  // namespace uiwidgets

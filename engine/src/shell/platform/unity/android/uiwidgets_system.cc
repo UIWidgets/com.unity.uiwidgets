@@ -23,11 +23,16 @@ void UIWidgetsSystem::UnregisterPanel(UIWidgetsPanel* panel) {
 void UIWidgetsSystem::Wait(std::chrono::nanoseconds max_duration) {
   Update();
 
+  // 使用std::chrono::duration_cast进行更安全的转换
+  auto duration_seconds = std::chrono::duration<double>(unity_uiwidgets_->GetEstimatedNextCallDuration());
+  std::chrono::nanoseconds internal_max_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(duration_seconds);
+	
   std::chrono::nanoseconds wait_duration =
       std::max(std::chrono::nanoseconds(0),
                next_uiwidgets_event_time_ - TimePoint::clock::now());
 
-  wait_duration = std::min(max_duration, wait_duration);
+  wait_duration = std::min(internal_max_duration, wait_duration);
+  wait_duration = std::max(std::chrono::nanoseconds(0), wait_duration);
 
   //TODO: find a proper api similar to MsgWaitForMultipleObjects on Windows
   //      which will notify os to wait for the given period of time
@@ -36,6 +41,9 @@ void UIWidgetsSystem::Wait(std::chrono::nanoseconds max_duration) {
 void UIWidgetsSystem::Update() {
   TimePoint next_event_time = TimePoint::max();
   for (auto* uiwidgets_panel : uiwidgets_panels_) {
+    if (!uiwidgets_panel->NeedUpdateByPlayerLoop()) {
+      continue;
+    }
     std::chrono::nanoseconds wait_duration = uiwidgets_panel->ProcessMessages();
     if (wait_duration != std::chrono::nanoseconds::max()) {
       next_event_time =
@@ -47,6 +55,9 @@ void UIWidgetsSystem::Update() {
 
 void UIWidgetsSystem::VSync() {
   for (auto* uiwidgets_panel : uiwidgets_panels_) {
+    if (!uiwidgets_panel->NeedUpdateByPlayerLoop()) {
+      continue;
+    }
     uiwidgets_panel->ProcessVSync();
   }
 }
@@ -55,7 +66,10 @@ void UIWidgetsSystem::WakeUp() {}
 
 void UIWidgetsSystem::GfxWorkerCallback(int eventId, void* data) {
   const fml::closure task(std::move(gfx_worker_tasks_[eventId]));
-  gfx_worker_tasks_.erase(eventId);
+  {
+    std::scoped_lock lock(task_mutex_);
+    gfx_worker_tasks_.erase(eventId);
+  }
 
   task();
 }
@@ -72,17 +86,9 @@ void UIWidgetsSystem::BindUnityInterfaces(IUnityInterfaces* unity_interfaces) {
   unity_interfaces_ = unity_interfaces;
 
   unity_uiwidgets_ = unity_interfaces_->Get<UnityUIWidgets::IUnityUIWidgets>();
-  unity_uiwidgets_->SetUpdateCallback(_Update);
-  unity_uiwidgets_->SetVSyncCallback(_VSync);
-  unity_uiwidgets_->SetWaitCallback(_Wait);
-  unity_uiwidgets_->SetWakeUpCallback(_WakeUp);
 }
 
 void UIWidgetsSystem::UnBindUnityInterfaces() {
-  unity_uiwidgets_->SetUpdateCallback(nullptr);
-  unity_uiwidgets_->SetVSyncCallback(nullptr);
-  unity_uiwidgets_->SetWaitCallback(nullptr);
-  unity_uiwidgets_->SetWakeUpCallback(nullptr);
   unity_uiwidgets_ = nullptr;
 
   unity_interfaces_ = nullptr;
@@ -92,3 +98,43 @@ UIWidgetsSystem* UIWidgetsSystem::GetInstancePtr() {
   return &g_uiwidgets_system;
 }
 }  // namespace uiwidgets
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendUpdateEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_Update();
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendVSyncEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_VSync();
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendWaitEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_Wait(0l);
+  }
+}
+
+UIWIDGETS_API(void)
+UIWidgetsSystem_SendWakeUpEvent()
+{
+  uiwidgets::UIWidgetsSystem *system = uiwidgets::UIWidgetsSystem::GetInstancePtr();
+  if (system)
+  {
+    system->_WakeUp();
+  }
+}

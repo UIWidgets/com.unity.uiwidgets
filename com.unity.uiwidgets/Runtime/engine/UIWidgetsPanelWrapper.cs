@@ -384,6 +384,14 @@ public partial class UIWidgetsPanelWrapper {
 
         [DllImport(dllName: NativeBindings.dllName)]
         static extern void UIWidgetsPanel_unregisterTexture(IntPtr ptr, int textureId);
+        [DllImport(dllName: NativeBindings.dllName)]
+        public static extern void UIWidgetsSystem_SendUpdateEvent();
+
+        [DllImport(dllName: NativeBindings.dllName)]
+        public static extern void UIWidgetsSystem_SendVSyncEvent();
+
+        [DllImport(dllName: NativeBindings.dllName)]
+        public static extern void UIWidgetsSystem_SendWaitEvent();
 
         static void UIWidgetsPanel_markNewFrameAvailable(IntPtr ptr, int textureId) {
             throw new Exception("The native binding of UIWidgetsPanel_markNewFrameAvailable is not implemented yet!!");

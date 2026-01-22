@@ -14,10 +14,8 @@ typedef void (*VoidCallbackLong)(long);
 UNITY_DECLARE_INTERFACE(IUnityUIWidgets) {
   virtual ~IUnityUIWidgets() {}
 
-  virtual void SetUpdateCallback(VoidCallback callback) = 0;
-  virtual void SetVSyncCallback(VoidCallback callback) = 0;
-  virtual void SetWaitCallback(VoidCallbackLong callback) = 0;
-  virtual void SetWakeUpCallback(VoidCallback callback) = 0;
+  virtual double GetEstimatedNextCallDuration() = 0;
+
   virtual void IssuePluginEventAndData(UnityRenderingEventAndData callback,
                                        int eventId, void* data) = 0;
   //TODO zxw: this API is not provided in 2019.4.26f1c1 due to a mistake :(

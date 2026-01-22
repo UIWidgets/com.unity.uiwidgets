@@ -43,7 +43,6 @@ class UIWidgetsSystem {
 
   FML_DISALLOW_COPY_AND_ASSIGN(UIWidgetsSystem);
 
- private:
   UIWIDGETS_CALLBACK(void) _Update() { GetInstancePtr()->Update(); }
 
   UIWIDGETS_CALLBACK(void) _Wait(long max_duration) {
@@ -58,6 +57,7 @@ class UIWidgetsSystem {
     GetInstancePtr()->GfxWorkerCallback(eventId, data);
   }
 
+private:
   void Update();
   void Wait(std::chrono::nanoseconds max_duration);
   void VSync();
