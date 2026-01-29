@@ -8,7 +8,7 @@
 #include <unordered_map>
 
 #include "Unity/IUnityInterface.h"
-#include "Unity/IUnityUIWidgets.h"
+#include "Unity/IUnityGraphicsExtensions.h"
 #include "flutter/fml/macros.h"
 #include "runtime/mono_api.h"
 #include <GLES2/gl2.h>
@@ -74,7 +74,7 @@ private:
   void GfxWorkerCallback(int eventId, void* data);
 
   IUnityInterfaces* unity_interfaces_ = nullptr;
-  UnityUIWidgets::IUnityUIWidgets* unity_uiwidgets_ = nullptr;
+  IUnityGraphicsExtensions* unity_uiwidgets_ = nullptr;
 
   std::unordered_map<int, fml::closure> gfx_worker_tasks_;
   int last_task_id_ = 0;

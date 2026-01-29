@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include "Unity/IUnityGraphics.h"
-#include "Unity/IUnityUIWidgets.h"
+#include "Unity/IUnityGraphicsExtensions.h"
 #include "include/core/SkSurface.h"
 #include "include/gpu/GrBackendSurface.h"
 

@@ -85,7 +85,7 @@ void UIWidgetsSystem::PostTaskToGfxWorker(const fml::closure& task) {
 void UIWidgetsSystem::BindUnityInterfaces(IUnityInterfaces* unity_interfaces) {
   unity_interfaces_ = unity_interfaces;
 
-  unity_uiwidgets_ = unity_interfaces_->Get<UnityUIWidgets::IUnityUIWidgets>();
+  unity_uiwidgets_ = unity_interfaces_->Get<IUnityGraphicsExtensions>();
 }
 
 void UIWidgetsSystem::UnBindUnityInterfaces() {

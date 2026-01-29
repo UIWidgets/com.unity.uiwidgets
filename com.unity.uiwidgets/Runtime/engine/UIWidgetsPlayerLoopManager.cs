@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
+using UnityEditor;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
 using static UnityEngine.PlayerLoop.PostLateUpdate;
 using static UnityEngine.PlayerLoop.Update;
-using UnityEditor;
 
 public class UIWidgetUpdate { }
 public class UIWidgetVSync { }
@@ -34,9 +33,9 @@ namespace Unity.UIWidgets.engine
             PlayerLoop.SetPlayerLoop(loopWithCustomUpdate);
 
             // Print the current Player loop to verify the custom update was added
-            StringBuilder sb = new();
-            RecursivePlayerLoopPrint(PlayerLoop.GetCurrentPlayerLoop(), sb, 0);
-            Debug.Log(sb.ToString());
+            // StringBuilder sb = new();
+            // RecursivePlayerLoopPrint(PlayerLoop.GetCurrentPlayerLoop(), sb, 0);
+            // Debug.Log(sb.ToString());
         }
 
         private static PlayerLoopSystem CreateCustomUpdateSystem(System.Type type, PlayerLoopSystem.UpdateFunction updateDelegate)
